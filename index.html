@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">  
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon">
+    <title>Cybersecurity</title>
+    <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap');
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d1cfcf;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea, input[type="text"], input[type="file"], input[type="password"] {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h2, h3 {
+            margin-bottom: 20px;
+        }
+
+        .animation {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .steganography {
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        .steganography textarea {
+            height: 100px;
+        }
+
+        .steganography img {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 title="Шифрование позволяет вам защитить текст с помощью пароля, так что только те, у кого есть правильный пароль, могут прочитать его. Стеганография позволяет скрывать текстовые сообщения внутри изображений, чтобы защитить их от несанкционированного доступа.">Шифрование и стеганография</h2>
+        <div>
+            <textarea id="message" title="Введите текст и пароль для шифрования, чтобы создать зашифрованное сообщение. Только тот, кто знает пароль, сможет расшифровать и прочитать его." placeholder="Введите текст для шифрования"></textarea>
+            <br>
+            <input type="text" id="password" placeholder="Введите пароль для шифрования">
+            <br>
+            <button onclick="encryptMessage()">Зашифровать текст</button>
+        </div>
+        <div id="encryptedText" class="hidden"></div>
+        <div id="decryptedText" class="hidden"></div>
+
+        <h3 title="Введите зашифрованный текст и пароль для расшифровки, чтобы получить исходное сообщение.">Расшифровать текст</h3>
+        <div>
+            <input type="text" id="encryptedInput" placeholder="Введите зашифрованный текст">
+            <br>
+            <input type="password" id="decryptionPassword" placeholder="Введите пароль для расшифровки">
+            <br>
+            <button onclick="decryptInput()">Расшифровать текст</button>
+        </div>
+        <div id="decryptedInputText" class="hidden"></div>
+
+        <div class="steganography" title="Используйте стеганографию для скрытия текстового сообщения внутри изображения. Загрузите изображение, введите сообщение и пароль для шифрования. Полученное изображение будет содержать скрытое сообщение, которое можно извлечь только зная пароль.">
+            <h3>Стеганография</h3>
+            <div>
+                <textarea id="steganographyMessage" placeholder="Введите текст для скрытия"></textarea>
+                <br>
+                <input type="file" id="imageInput" accept="image/*">
+                <br>
+                <input type="password" id="steganographyPassword" placeholder="Введите пароль для шифрования">
+                <br>
+                <button onclick="encodeMessage()">Скрыть сообщение</button>
+            </div>
+            <div id="encodedImage" class="hidden"></div>
+
+            <h3>Извлечь сообщение</h3>
+            <div>
+                <img id="decodedImage" class="hidden">
+                <br>
+                <input type="password" id="steganographyDecryptionPassword" placeholder="Введите пароль для расшифровки">
+                <br>
+                <button onclick="decodeMessage()">Извлечь сообщение</button>
+            </div>
+            <div id="decodedMessage" class="hidden"></div>
+        </div>
+        <h3 title="Генератор паролей создает случайные, безопасные пароли, которые вы можете использовать для защиты своих данных. Оценка пароля помогает определить, насколько безопасен ваш введенный пароль. Чем выше оценка, тем лучше защищен ваш пароль от взлома.">Генератор и оценка пароля</h3>
+        <button onclick="generateAndAssessPassword()">Сгенерировать пароль</button>
+        <p id="generatedPassword"></p>
+        <p id="passwordStrength"></p>
+        <h3>Оценка риска введенного пароля</h3>
+        <input type="password" id="inputPassword" placeholder="Введите пароль для оценки">
+        <p id="inputPasswordStrength"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        function encryptMessage() {
+            var message = document.getElementById('message').value;
+            var password = document.getElementById('password').value;
+            var encryptedMessage = CryptoJS.AES.encrypt(message, password).toString();
+            document.getElementById('encryptedText').innerHTML = `<p class="animation">Зашифровано: ${encryptedMessage}</p>`;
+            document.getElementById('encryptedText').classList.remove('hidden');
+        }
+    
+        function decryptInput() {
+            var encryptedInput = document.getElementById('encryptedInput').value;
+            var decryptionPassword = document.getElementById('decryptionPassword').value;
+            var decryptedMessage = CryptoJS.AES.decrypt(encryptedInput, decryptionPassword).toString(CryptoJS.enc.Utf8);
+            document.getElementById('decryptedInputText').innerHTML = `<p class="animation">Расшифровано: ${decryptedMessage}</p>`;
+            document.getElementById('decryptedInputText').classList.remove('hidden');
+        }
+    
+        function encodeMessage() {
+            var message = document.getElementById('steganographyMessage').value;
+            var password = document.getElementById('steganographyPassword').value;
+            var fileInput = document.getElementById('imageInput');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+    
+            reader.onload = function(event) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    ctx.font = "20px Arial";
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+                    ctx.fillText(message, 10, 50); // Скрываем сообщение в верхнем левом углу
+                    var encodedImage = canvas.toDataURL(file.type);
+                    document.getElementById('encodedImage').innerHTML = `<img src="${encodedImage}" alt="Encoded Image">`;
+                    document.getElementById('encodedImage').classList.remove('hidden');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    
+        function decodeMessage() {
+            var img = document.getElementById('decodedImage');
+            var password = document.getElementById('steganographyDecryptionPassword').value;
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+    
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                var decodedMessage = '';
+    
+                for (var i = 0; i < imageData.data.length; i += 4) {
+                    decodedMessage += String.fromCharCode(imageData.data[i]);
+                }
+    
+                var decryptedMessage = CryptoJS.AES.decrypt(decodedMessage, password).toString(CryptoJS.enc.Utf8);
+                document.getElementById('decodedMessage').innerHTML = `<p class="animation">Извлеченное сообщение: ${decryptedMessage}</p>`;
+                document.getElementById('decodedMessage').classList.remove('hidden');
+            };
+    
+            img.src = document.getElementById('encodedImage').querySelector('img').src;
+        }
+
+        function generatePassword(length = 12) {
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let password = "";
+            for (let i = 0; i < length; ++i) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            return password;
+        }
+
+        function assessPasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (password.length >= 12) score++;
+            if (password.length >= 16) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/\d/.test(password)) score++;
+            if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+            if (score <= 2) {
+                return {text: "Слабый", color: "red"};
+            } else if (score <= 4) {
+                return {text: "Средний", color: "orange"};
+            } else if (score <= 6) {
+                return {text: "Сильный", color: "blue"};
+            } else {
+                return {text: "Очень сильный", color: "green"};
+            }
+        }
+
+        function generateAndAssessPassword() {
+            const length = 12;
+            const generatedPassword = generatePassword(length);
+            const strength = assessPasswordStrength(generatedPassword);
+
+            const passwordElement = document.getElementById("generatedPassword");
+            const strengthElement = document.getElementById("passwordStrength");
+
+            passwordElement.innerText = `Сгенерированный пароль: ${generatedPassword}`;
+            strengthElement.innerText = `Оценка риска пароля: ${strength.text}`;
+            strengthElement.style.color = strength.color;
+        }
+
+        function assessInputPassword() {
+            const password = document.getElementById("inputPassword").value;
+            const strength = assessPasswordStrength(password);
+
+            const strengthElement = document.getElementById("inputPasswordStrength");
+            strengthElement.innerText = `Оценка риска пароля: ${strength.text}`;
+            strengthElement.style.color = strength.color;
+        }
+
+        document.getElementById("inputPassword").addEventListener("input", assessInputPassword);
+    </script>
+</body>
+</html>
